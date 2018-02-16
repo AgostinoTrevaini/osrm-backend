@@ -299,3 +299,24 @@ Feature: Motorway Guidance
             | waypoints | route         | turns                               |
             | a,e       | abcde,abcde   | depart,arrive                       |
             | a,g       | abcde,bfg,bfg | depart,off ramp slight right,arrive |
+
+
+    Scenario: Highway Fork with a Link
+        Given the node map
+            """
+                 /-----------d
+            a-b-c------------e
+                 \-----------f
+            """
+
+        And the ways
+            | nodes | highway       |
+            | abce  | motorway      |
+            | cf    | motorway      |
+            | cd    | motorway_link |
+
+       When I route I should get
+            | waypoints | route          | turns                           |
+            | a,d       | abce,cd,cd     | depart,turn straight,arrive     |
+            | a,e       | abce,abce,abce | depart,fork slight left,arrive  |
+            | a,f       | abce,cf,cf     | depart,fork slight right,arrive |
